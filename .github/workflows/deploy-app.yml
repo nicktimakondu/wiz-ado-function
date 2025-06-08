@@ -20,7 +20,7 @@ permissions:
 # Environment variables available to all jobs in the workflow.
 env:
   # This name must match the name of the function app created by the infrastructure workflow.
-  FUNCTION_APP_NAME: 'func-wiz-devops-prod-001'
+  FUNCTION_APP_NAME: 'func-wiz-devops-prod-002'
 
 jobs:
   # This job deploys the Python function code to the provisioned infrastructure.
