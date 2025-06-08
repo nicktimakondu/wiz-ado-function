@@ -1,0 +1,104 @@
+[
+  {
+    "trigger": {
+      "source": "SecurityScannerX",
+      "type": "TOXIC_COMBINATION",
+      "ruleId": "RULE-001-HIGH",
+      "ruleName": "SQL Injection Vulnerability",
+      "updatedFields": "severity field was changed from Medium to High, status field was changed from Open to In Progress",
+      "ChangedBy": "automation-scanner@example.com"
+    },
+    "issue": {
+      "id": "wc-id-2246",
+      "status": "Open",
+      "severity": "High",
+      "created": "2024-05-29T10:15:00Z",
+      "projects": "WebApp-Frontend, PaymentGateway-API"
+    },
+    "resource": {
+      "id": "vm-prod-db-01",
+      "name": "Production Database Server",
+      "type": "VirtualMachine",
+      "cloudPlatform": "Azure",
+      "subscriptionId": "sub-12345-prod",
+      "subscriptionName": "Production Subscription A",
+      "region": "East US",
+      "status": "Running",
+      "cloudProviderURL": "https://portal.azure.com/#resource/subscriptions/sub-12345-prod/resourceGroups/RG-PROD-DB/providers/Microsoft.Compute/virtualMachines/vm-prod-db-01"
+    },
+    "control": {
+      "id": "CTRL-SEC-005",
+      "name": "Sanitize Database Inputs",
+      "description": "Ensure all user-supplied input is sanitized before being used in database queries to prevent SQL injection.",
+      "severity": "Critical"
+    }
+  },
+  {
+    "trigger": {
+      "source": "ComplianceCheckerY",
+      "type": "ConfigurationDrift",
+      "ruleId": "RULE-002-MEDIUM",
+      "ruleName": "Unencrypted S3 Bucket",
+      "updatedFields": "isEncrypted field was changed from true to false",
+      "ChangedBy": "config-agent@example.com"
+    },
+    "issue": {
+      "id": "ISSUE-78902",
+      "status": "New",
+      "severity": "Medium",
+      "created": "2024-05-30T14:30:00Z",
+      "projects": "DataLake-Storage, AnalyticsPlatform"
+    },
+    "resource": {
+      "id": "s3-customer-data-archive",
+      "name": "Customer Data Archive Bucket",
+      "type": "StorageBucket",
+      "cloudPlatform": "AWS",
+      "subscriptionId": "aws-acc-67890-main",
+      "subscriptionName": "Main AWS Account",
+      "region": "us-west-2",
+      "status": "Active",
+      "cloudProviderURL": "https://s3.console.aws.amazon.com/s3/buckets/s3-customer-data-archive?region=us-west-2"
+    },
+    "control": {
+      "id": "CTRL-CMPL-012",
+      "name": "Ensure Data-at-Rest Encryption",
+      "description": "All sensitive data stored at rest must be encrypted using strong encryption algorithms.",
+      "severity": "High"
+    }
+  },
+  {
+    "trigger": {
+      "source": "AccessMonitorZ",
+      "type": "AnomalousLogin",
+      "ruleId": "RULE-003-LOW",
+      "ruleName": "Login from Unusual Location",
+      "updatedFields": "lastLoginLocation field was changed from New York to Moscow",
+      "ChangedBy": "security-ops@example.com"
+    },
+    "issue": {
+      "id": "ISSUE-78903",
+      "status": "Investigating",
+      "severity": "Low",
+      "created": "2024-05-30T18:45:10Z",
+      "projects": "InternalAdminPortal"
+    },
+    "resource": {
+      "id": "user-admin-account-john.doe",
+      "name": "John Doe Admin Account",
+      "type": "UserIdentity",
+      "cloudPlatform": "Okta",
+      "subscriptionId": "okta-tenant-main",
+      "subscriptionName": "Main Okta Tenant",
+      "region": "Global",
+      "status": "Active",
+      "cloudProviderURL": "https://mycompany.okta.com/admin/user/00u123abc456def789"
+    },
+    "control": {
+      "id": "CTRL-ACCESS-001",
+      "name": "Monitor for Anomalous Account Activity",
+      "description": "Implement monitoring and alerting for suspicious login patterns or account activities.",
+      "severity": "Medium"
+    }
+  }
+]
