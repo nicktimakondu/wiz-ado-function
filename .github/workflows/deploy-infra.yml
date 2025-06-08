@@ -1,0 +1,75 @@
+# This workflow provisions or updates the Azure infrastructure using Terraform.
+
+name: Deploy Azure Infrastructure
+
+# Triggers the workflow on push events to the main branch affecting the infra folder,
+# and also allows for manual runs from the GitHub Actions UI.
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'infra/**'
+      - '.github/workflows/deploy-infra.yml'
+  workflow_dispatch:
+
+# Environment variables available to all jobs in the workflow.
+env:
+  # This name must be globally unique across Azure.
+  FUNCTION_APP_NAME: 'func-wiz-devops-prod-001'
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  # This job provisions the Azure infrastructure using Terraform.
+  terraform_apply:
+    name: 'Terraform Apply'
+    runs-on: ubuntu-latest
+
+    # The working directory for all commands in this job is set to the 'infra' folder.
+    defaults:
+      run:
+        working-directory: ./infra
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Azure Login
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Terraform Init
+        id: tf-init
+        run: terraform init -backend-config="storage_account_name=${{ secrets.TF_STATE_STORAGE_ACCOUNT }}" -backend-config="container_name=${{ secrets.TF_STATE_CONTAINER }}" -backend-config="key=terraform.state" -backend-config="${{ secrets.TF_STATE_RG }}"
+
+      - name: Terraform Validate
+        id: tf-validate
+        run: terraform validate -no-color
+
+      - name: Terraform Plan
+        id: tf-plan
+        # Pass the function app name and DevOps details as variables to the plan.
+        run: |
+          terraform plan -no-color \
+            -var="function_app_name=${{ env.FUNCTION_APP_NAME }}" \
+            -var="devops_org_url=${{ secrets.DEVOPS_ORG_URL }}" \
+            -var="devops_project_name=${{ secrets.DEVOPS_PROJECT_NAME }}" \
+            -out=tfplan
+        continue-on-error: true
+
+      - name: Show Terraform Plan Status
+        if: steps.tf-plan.outcome == 'failure'
+        run: exit 1
+
+      - name: Terraform Apply
+        id: tf-apply
+        run: terraform apply -auto-approve tfplan

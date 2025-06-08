@@ -1,0 +1,64 @@
+# This workflow deploys the Python function code to the existing Azure infrastructure.
+
+name: Deploy Python Function App
+
+# Triggers the workflow on push events to the main branch affecting the app folder,
+# and also allows for manual runs from the GitHub Actions UI.
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'app/**'
+      - '.github/workflows/deploy-app.yml'
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+# Environment variables available to all jobs in the workflow.
+env:
+  # This name must match the name of the function app created by the infrastructure workflow.
+  FUNCTION_APP_NAME: 'func-wiz-devops-prod-001'
+
+jobs:
+  # This job deploys the Python function code to the provisioned infrastructure.
+  deploy_function_app:
+    name: 'Deploy Function App'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python version
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Azure Login
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Resolve project dependencies
+        shell: bash
+        run: |
+          pushd './app'
+          python -m venv .venv
+          source .venv/bin/activate
+          pip install --upgrade pip
+          pip install -r requirements.txt
+          popd
+
+      - name: Deploy to Azure Function App
+        uses: azure/functions-action@v1
+        id: fa
+        with:
+          # Use the environment variable to specify the target app name.
+          app-name: ${{ env.FUNCTION_APP_NAME }}
+          # The package to deploy is the 'app' folder.
+          package: './app'
