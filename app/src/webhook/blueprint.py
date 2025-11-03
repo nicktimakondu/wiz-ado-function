@@ -3,7 +3,7 @@
 import azure.functions as func
 import logging
 
-from webhook_logic import handle_webhook_request # Ensure this path is correct for your project structure
+from app.src.webhook.webhook_logic import handle_webhook_request # Ensure this path is correct for your project structure
 
 devops_webhook_bp = func.Blueprint()
 

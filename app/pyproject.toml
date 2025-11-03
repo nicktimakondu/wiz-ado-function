@@ -1,0 +1,19 @@
+[project]
+name = "webhook"
+version = "0.1.0"
+description = "Add your description here"
+requires-python = ">=3.13"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+dependencies = [
+  "azure-functions",
+  "requests",
+  "azure-identity",
+  "azure-core"
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/webhook"]

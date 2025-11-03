@@ -1,5 +1,0 @@
-# Dependencies for the function.
-azure-functions
-requests
-azure-identity # For DefaultAzureCredential
-azure-core # Often a dependency of azure-identity, good to list explicitly
