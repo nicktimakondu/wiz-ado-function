@@ -7,7 +7,7 @@ variable "resource_group_name" {
 variable "location" {
   description = "The Azure region where resources will be created."
   type        = string
-  default     = "East US"
+  default     = "Central US"
 }
 
 variable "storage_account_name" {
@@ -19,13 +19,13 @@ variable "storage_account_name" {
 variable "app_service_plan_name" {
   description = "The name of the App Service Plan."
   type        = string
-  default     = "plan-webhook-function-001"
+  default     = "plan-webhook-function-002"
 }
 
 variable "function_app_name" {
   description = "A unique name for the Function App."
   type        = string
-  default     = "wiz-webhook-to-devops-001" # Must be globally unique
+  default     = "wiz-webhook-to-devops-002" # Must be globally unique
 }
 
 variable "devops_org_url" {
