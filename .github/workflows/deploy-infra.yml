@@ -5,12 +5,12 @@ name: Deploy Azure Infrastructure
 # Triggers the workflow on push events to the main branch affecting the infra folder,
 # and also allows for manual runs from the GitHub Actions UI.
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - 'infra/**'
-      - '.github/workflows/deploy-infra.yml'
+  # push:
+  #   branches:
+  #     - main
+  #   paths:
+  #     - 'infra/**'
+  #     - '.github/workflows/deploy-infra.yml'
   workflow_dispatch:
 
 # Environment variables available to all jobs in the workflow.
